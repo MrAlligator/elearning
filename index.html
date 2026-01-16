@@ -202,16 +202,17 @@
         const rakaatColumn = document.getElementById('rakaatColumn');
         const message = document.getElementById('message');
 
+        let activeItem = null; // ⬅️ KUNCI ANDROID FIX
+
         sholatData.sort(() => Math.random() - 0.5).forEach(item => {
             const div = document.createElement('div');
             div.className = 'item';
             div.draggable = true;
-            div.innerHTML = `${item.icon} ${item.name}`;
             div.dataset.rakaat = item.rakaat;
+            div.innerHTML = `${item.icon} ${item.name}`;
 
-            div.addEventListener('dragstart', e => {
-                e.dataTransfer.setData('rakaat', item.rakaat);
-                e.dataTransfer.setData('name', item.name);
+            div.addEventListener('dragstart', () => {
+                activeItem = div; // simpan item aktif
             });
 
             sholatColumn.appendChild(div);
@@ -226,23 +227,25 @@
 
             zone.addEventListener('drop', e => {
                 e.preventDefault();
-                const rakaat = e.dataTransfer.getData('rakaat');
-                const name = e.dataTransfer.getData('name');
-                const dragged = [...document.querySelectorAll('.item')]
-                    .find(el => el.textContent.includes(name) && !el.classList.contains('used'));
 
                 zone.classList.remove('wrong', 'correct');
 
-                if (rakaat == num && dragged) {
+                if (!activeItem) return;
+
+                const rakaat = activeItem.dataset.rakaat;
+
+                if (rakaat == num && !activeItem.classList.contains('used')) {
                     zone.classList.add('correct');
-                    zone.appendChild(dragged);
-                    dragged.classList.add('used');
-                    dragged.draggable = false;
+                    zone.appendChild(activeItem);
+                    activeItem.classList.add('used');
+                    activeItem.draggable = false;
                     message.textContent = '🎉 MasyaAllah, benar!';
                 } else {
                     zone.classList.add('wrong');
                     message.textContent = '❌ Coba lagi ya';
                 }
+
+                activeItem = null;
             });
 
             rakaatColumn.appendChild(zone);
