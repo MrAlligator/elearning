@@ -2,9 +2,9 @@
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>E-Learning Islam Anak TK</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <style>
         body {
@@ -21,8 +21,7 @@
         }
 
         header img {
-            width: 70px;
-            margin-bottom: 10px;
+            width: 80px;
         }
 
         .container {
@@ -49,16 +48,11 @@
             padding: 20px;
             text-align: center;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, .1);
-            transition: .2s;
-        }
-
-        .menu-card:hover {
-            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         .menu-card img {
-            width: 80px;
+            width: 90px;
             margin-bottom: 10px;
         }
 
@@ -67,7 +61,7 @@
             background: white;
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, .1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         .back-btn {
@@ -87,7 +81,7 @@
             margin-top: 20px;
         }
 
-        @media(max-width:768px) {
+        @media (max-width: 768px) {
             .columns {
                 grid-template-columns: 1fr;
             }
@@ -96,18 +90,18 @@
         .item {
             background: #eef2ff;
             border-radius: 14px;
-            padding: 16px;
+            padding: 12px;
             margin-bottom: 12px;
             text-align: center;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: grab;
         }
 
         .item img {
-            width: 50px;
+            width: 60px;
             display: block;
-            margin: auto;
+            margin: 0 auto 6px;
         }
 
         .item.used {
@@ -119,11 +113,11 @@
             background: #f1f5f9;
             border: 3px dashed #94a3b8;
             border-radius: 14px;
-            padding: 20px;
+            padding: 16px;
             margin-bottom: 12px;
             text-align: center;
             min-height: 90px;
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .correct {
@@ -138,7 +132,7 @@
 
         .message {
             text-align: center;
-            font-size: 20px;
+            font-size: 18px;
             margin-top: 16px;
             font-weight: bold;
         }
@@ -156,153 +150,281 @@
             padding: 20px;
             text-align: center;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
+        }
+
+        .akhlak-card img {
+            width: 70px;
+            margin-bottom: 8px;
         }
     </style>
 </head>
 
 <body>
-
     <header>
-        <img src="https://cdn-icons-png.flaticon.com/512/3940/3940056.png">
+        <img src="https://cdn-icons-png.flaticon.com/512/3940/3940056.png" />
         <h1>E-Learning Islam Anak TK</h1>
         <p>Belajar sambil bermain 🌈</p>
     </header>
 
     <div class="container">
-
         <!-- ===== MENU ===== -->
         <div id="menu">
             <h2>Pilih Permainan</h2>
             <div class="menu">
                 <div class="menu-card" onclick="openGame('sholatGame')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png" />
                     <p>Sholat & Rakaat</p>
                 </div>
-                <div class="menu-card" onclick="openGame('akhlakGame')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+                <div class="menu-card" onclick="openGame('akhlakGame')" style="display: none;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" />
                     <p>Akhlak Baik</p>
+                </div>
+                <div class="menu-card" onclick="openGame('wudhuGame')" style="display: none;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png" />
+                    <p>Urutan Wudhu</p>
                 </div>
             </div>
         </div>
 
-        <!-- ===== GAME SHOLAT ===== -->
+        <!-- ===== SHOLAT GAME ===== -->
         <div id="sholatGame" class="game">
             <button class="back-btn" onclick="backMenu()">⬅ Kembali</button>
-            <h2>Cocokkan Sholat & Jumlah Rakaat</h2>
+
+            <h2>Cocokkan Sholat & Rakaat</h2>
+            <button class="back-btn" onclick="resetSholatGame()">🔄 Mulai Ulang</button>
+
             <div class="columns">
                 <div id="sholatColumn"></div>
                 <div id="rakaatColumn"></div>
             </div>
+
             <div class="message" id="message"></div>
         </div>
 
-        <!-- ===== GAME AKHLAK ===== -->
+        <!-- ===== AKHLAK GAME ===== -->
         <div id="akhlakGame" class="game">
             <button class="back-btn" onclick="backMenu()">⬅ Kembali</button>
             <h2>Pilih Perilaku Baik</h2>
             <div class="akhlak-grid">
-                <div class="akhlak-card" onclick="good()">🤝 Berbagi mainan</div>
-                <div class="akhlak-card" onclick="bad()">😡 Marah-marah</div>
-                <div class="akhlak-card" onclick="good()">🙏 Mengucap salam</div>
-                <div class="akhlak-card" onclick="bad()">🚫 Bohong</div>
+                <div class="akhlak-card" onclick="good()">
+                    <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" />
+                    Berbagi
+                </div>
+                <div class="akhlak-card" onclick="bad()">
+                    <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" />
+                    Marah
+                </div>
+                <div class="akhlak-card" onclick="good()">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1034/1034131.png" />
+                    Mengucap Salam
+                </div>
+                <div class="akhlak-card" onclick="bad()">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" />
+                    Bohong
+                </div>
             </div>
             <div class="message" id="akhlakMsg"></div>
         </div>
 
+        <!-- ===== WUDHU GAME ===== -->
+        <div id="wudhuGame" class="game">
+            <button class="back-btn" onclick="backMenu()">⬅ Kembali</button>
+            <h2>Susun Urutan Wudhu</h2>
+            <div class="columns">
+                <div id="wudhuItems"></div>
+                <div id="wudhuZones"></div>
+            </div>
+            <div class="message" id="wudhuMsg"></div>
+        </div>
     </div>
 
     <script>
         function openGame(id) {
-            document.getElementById('menu').style.display = 'none';
-            document.getElementById(id).style.display = 'block';
+            menu.style.display = "none";
+            document.getElementById(id).style.display = "block";
         }
 
         function backMenu() {
-            document.querySelectorAll('.game').forEach(g => g.style.display = 'none');
-            document.getElementById('menu').style.display = 'block';
+            document
+                .querySelectorAll(".game")
+                .forEach((g) => (g.style.display = "none"));
+            menu.style.display = "block";
         }
 
-        /* ===== SHOLAT GAME (ANDROID SAFE) ===== */
+        /* ===== SHOLAT ===== */
         const sholatData = [{
-                name: 'Subuh',
-                rakaat: 2,
-                icon: '🌅'
-            },
-            {
-                name: 'Dzuhur',
-                rakaat: 4,
-                icon: '☀️'
-            },
-            {
-                name: 'Ashar',
-                rakaat: 4,
-                icon: '🌤️'
-            },
-            {
-                name: 'Maghrib',
-                rakaat: 3,
-                icon: '🌇'
-            },
-            {
-                name: 'Isya',
-                rakaat: 4,
-                icon: '🌙'
-            }
+            n: "Subuh",
+            r: 2,
+            i: "🌅"
+        },
+        {
+            n: "Dzuhur",
+            r: 4,
+            i: "☀️"
+        },
+        {
+            n: "Ashar",
+            r: 4,
+            i: "🌤️"
+        },
+        {
+            n: "Maghrib",
+            r: 3,
+            i: "🌇"
+        },
+        {
+            n: "Isya",
+            r: 4,
+            i: "🌙"
+        },
         ];
         const rakaatData = [2, 3, 4];
-        let activeItem = null;
+        let active = null;
 
-        sholatData.sort(() => Math.random() - 0.5).forEach(item => {
-            const d = document.createElement('div');
-            d.className = 'item';
-            d.draggable = true;
-            d.dataset.rakaat = item.rakaat;
-            d.innerHTML = `<div style="font-size:32px">${item.icon}</div>${item.name}`;
-            d.ondragstart = () => activeItem = d;
-            sholatColumn.appendChild(d);
-        });
-
-        rakaatData.forEach(num => {
-            const z = document.createElement('div');
-            z.className = 'dropzone';
-            z.innerHTML = `<strong>${num} Rakaat</strong>`;
-            z.ondragover = e => e.preventDefault();
-            z.ondrop = e => {
+        sholatData
+            .sort(() => Math.random() - 0.5)
+            .forEach((s) => {
+                const d = document.createElement("div");
+                d.className = "item";
+                d.draggable = true;
+                d.dataset.r = s.r;
+                d.innerHTML = `<div style="font-size:32px">${s.i}</div>${s.n}`;
+                d.ondragstart = () => (active = d);
+                sholatColumn.appendChild(d);
+            });
+        rakaatData.forEach((n) => {
+            const z = document.createElement("div");
+            z.className = "dropzone";
+            z.innerHTML = `${n} Rakaat`;
+            z.ondragover = (e) => e.preventDefault();
+            z.ondrop = (e) => {
                 e.preventDefault();
-                z.classList.remove('wrong', 'correct');
-                if (activeItem && activeItem.dataset.rakaat == num) {
-                    z.classList.add('correct');
-                    z.appendChild(activeItem);
-                    activeItem.draggable = false;
-                    activeItem.classList.add('used');
-                    message.innerHTML = `🎉 Benar!<br>
-       <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="80"><br>
-       MasyaAllah`;
+                if (active && active.dataset.r == n) {
+                    z.classList.add("correct");
+                    z.appendChild(active);
+                    active.draggable = false;
+                    message.innerHTML = `🎉 Benar!<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
                 } else {
-                    z.classList.add('wrong');
-                    message.innerHTML = `❌ Salah<br>
-       <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="80"><br>
-       Coba lagi ya`;
+                    z.classList.add("wrong");
+                    message.innerHTML = `❌ Salah<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
                 }
-                activeItem = null;
-            }
+                active = null;
+            };
             rakaatColumn.appendChild(z);
         });
 
         /* ===== AKHLAK ===== */
         function good() {
-            document.getElementById('akhlakMsg').innerHTML =
-                '✅ Perilaku baik<br><img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="80">';
+            akhlakMsg.innerHTML = `👍 Perilaku baik<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
         }
 
         function bad() {
-            document.getElementById('akhlakMsg').innerHTML =
-                '❌ Itu tidak baik<br><img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="80">';
+            akhlakMsg.innerHTML = `❌ Tidak baik<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
+        }
+
+        /* ===== WUDHU ===== */
+        const wudhuSteps = [{
+            t: "Niat",
+            img: "https://cdn-icons-png.flaticon.com/512/1034/1034131.png",
+        },
+        {
+            t: "Membasuh Wajah",
+            img: "https://cdn-icons-png.flaticon.com/512/2922/2922510.png",
+        },
+        {
+            t: "Membasuh Tangan",
+            img: "https://cdn-icons-png.flaticon.com/512/2922/2922522.png",
+        },
+        {
+            t: "Mengusap Kepala",
+            img: "https://cdn-icons-png.flaticon.com/512/2922/2922499.png",
+        },
+        {
+            t: "Membasuh Kaki",
+            img: "https://cdn-icons-png.flaticon.com/512/2922/2922527.png",
+        },
+        ];
+        let wActive = null;
+
+        wudhuSteps
+            .sort(() => Math.random() - 0.5)
+            .forEach((s) => {
+                const d = document.createElement("div");
+                d.className = "item";
+                d.draggable = true;
+                d.innerHTML = `<img src="${s.img}">${s.t}`;
+                d.ondragstart = () => (wActive = d);
+                wudhuItems.appendChild(d);
+            });
+        wudhuSteps.forEach((s, i) => {
+            const z = document.createElement("div");
+            z.className = "dropzone";
+            z.textContent = "Langkah " + (i + 1);
+            z.ondragover = (e) => e.preventDefault();
+            z.ondrop = (e) => {
+                e.preventDefault();
+                if (wActive && wActive.textContent.includes(s.t)) {
+                    z.classList.add("correct");
+                    z.appendChild(wActive);
+                    wActive.draggable = false;
+                    wudhuMsg.innerHTML = `🎉 Benar!<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
+                } else {
+                    z.classList.add("wrong");
+                    wudhuMsg.innerHTML = `❌ Salah<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
+                }
+                wActive = null;
+            };
+            wudhuZones.appendChild(z);
+        });
+
+        function resetSholatGame() {
+            // kosongkan kolom
+            sholatColumn.innerHTML = '';
+            rakaatColumn.innerHTML = '';
+            message.innerHTML = '';
+
+            active = null;
+
+            // acak ulang data sholat
+            sholatData.sort(() => Math.random() - 0.5).forEach(s => {
+                const d = document.createElement('div');
+                d.className = 'item';
+                d.draggable = true;
+                d.dataset.r = s.r;
+                d.innerHTML = `<div style="font-size:32px">${s.i}</div>${s.n}`;
+                d.ondragstart = () => active = d;
+                sholatColumn.appendChild(d);
+            });
+
+            // buat ulang dropzone
+            rakaatData.forEach(n => {
+                const z = document.createElement('div');
+                z.className = 'dropzone';
+                z.innerHTML = `${n} Rakaat`;
+
+                z.ondragover = e => e.preventDefault();
+                z.ondrop = e => {
+                    e.preventDefault();
+                    z.classList.remove('correct', 'wrong');
+
+                    if (active && active.dataset.r == n) {
+                        z.classList.add('correct');
+                        z.appendChild(active);
+                        active.draggable = false;
+                        message.innerHTML = `🎉 Benar!<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
+                    } else {
+                        z.classList.add('wrong');
+                        message.innerHTML = `❌ Salah<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
+                    }
+                    active = null;
+                };
+
+                rakaatColumn.appendChild(z);
+            });
         }
     </script>
-
 </body>
 
 </html>
