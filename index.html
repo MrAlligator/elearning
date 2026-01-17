@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <title>E-Learning Islam Anak TK</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         body {
@@ -97,14 +98,36 @@
             font-weight: bold;
             cursor: grab;
         }
-
+        
         .item img {
             width: 60px;
             display: block;
             margin: 0 auto 6px;
         }
-
+        
         .item.used {
+            background: #bbf7d0;
+            cursor: default;
+        }
+        
+        .item-step {
+            background: #eef2ff;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: grab;
+        }
+
+        .item-step img {
+            width: 60px;
+            display: block;
+            margin: 0 auto 6px;
+        }
+        
+        .item-step.used {
             background: #bbf7d0;
             cursor: default;
         }
@@ -118,6 +141,21 @@
             text-align: center;
             min-height: 90px;
             font-size: 18px;
+        }
+
+        .dropzone-step {
+            background: #f1f5f9;
+            border: 3px dashed #94a3b8;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+            text-align: center;
+            min-height: 200px; 
+            font-size: 18px;
+            display: flex;
+            align-items: center;        /* tengah vertikal */
+            justify-content: center;    /* tengah horizontal */
+            flex-direction: column;
         }
 
         .correct {
@@ -185,6 +223,10 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png" />
                     <p>Urutan Wudhu</p>
                 </div>
+                <div class="menu-card" onclick="openGame('sholatStepGame')">
+                    <img src="assets/sholat/Bersedekap.png" />
+                    <p>Urutan Sholat</p>
+                </div>
             </div>
         </div>
 
@@ -194,15 +236,15 @@
 
             <h2>Cocokkan Sholat & Rakaat</h2>
             <button class="back-btn" onclick="resetSholatGame()">🔄 Mulai Ulang</button>
-
+            
             <div class="columns">
                 <div id="sholatColumn"></div>
                 <div id="rakaatColumn"></div>
             </div>
-
+            
             <div class="message" id="message"></div>
         </div>
-
+        
         <!-- ===== AKHLAK GAME ===== -->
         <div id="akhlakGame" class="game">
             <button class="back-btn" onclick="backMenu()">⬅ Kembali</button>
@@ -227,7 +269,7 @@
             </div>
             <div class="message" id="akhlakMsg"></div>
         </div>
-
+        
         <!-- ===== WUDHU GAME ===== -->
         <div id="wudhuGame" class="game">
             <button class="back-btn" onclick="backMenu()">⬅ Kembali</button>
@@ -237,6 +279,18 @@
                 <div id="wudhuZones"></div>
             </div>
             <div class="message" id="wudhuMsg"></div>
+        </div>
+        
+        <!-- ===== SHOLAT STEP GAME ===== -->
+        <div id="sholatStepGame" class="game">
+            <button class="back-btn" onclick="backMenu()">⬅ Kembali</button>
+            <h2>Susun Tata Cara Sholat</h2>
+            <button class="back-btn" onclick="resetSholatStepsGame()">🔄 Mulai Ulang</button>
+            <div class="columns">
+                <div id="sholatSteps"></div>
+                <div id="sholatZones"></div>
+            </div>
+            <div class="message" id="sholatStepMsg"></div>
         </div>
     </div>
 
@@ -255,30 +309,30 @@
 
         /* ===== SHOLAT ===== */
         const sholatData = [{
-            n: "Subuh",
-            r: 2,
-            i: "🌅"
-        },
-        {
-            n: "Dzuhur",
-            r: 4,
-            i: "☀️"
-        },
-        {
-            n: "Ashar",
-            r: 4,
-            i: "🌤️"
-        },
-        {
-            n: "Maghrib",
-            r: 3,
-            i: "🌇"
-        },
-        {
-            n: "Isya",
-            r: 4,
-            i: "🌙"
-        },
+                n: "Subuh",
+                r: 2,
+                i: "🌅"
+            },
+            {
+                n: "Dzuhur",
+                r: 4,
+                i: "☀️"
+            },
+            {
+                n: "Ashar",
+                r: 4,
+                i: "🌤️"
+            },
+            {
+                n: "Maghrib",
+                r: 3,
+                i: "🌇"
+            },
+            {
+                n: "Isya",
+                r: 4,
+                i: "🌙"
+            },
         ];
         const rakaatData = [2, 3, 4];
         let active = null;
@@ -305,10 +359,12 @@
                     z.classList.add("correct");
                     z.appendChild(active);
                     active.draggable = false;
-                    message.innerHTML = `🎉 Benar!<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
+                    message.innerHTML =
+                        `🎉 Benar!<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
                 } else {
                     z.classList.add("wrong");
-                    message.innerHTML = `❌ Salah<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
+                    message.innerHTML =
+                        `❌ Salah<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
                 }
                 active = null;
             };
@@ -317,34 +373,36 @@
 
         /* ===== AKHLAK ===== */
         function good() {
-            akhlakMsg.innerHTML = `👍 Perilaku baik<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
+            akhlakMsg.innerHTML =
+                `👍 Perilaku baik<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
         }
 
         function bad() {
-            akhlakMsg.innerHTML = `❌ Tidak baik<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
+            akhlakMsg.innerHTML =
+                `❌ Tidak baik<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
         }
 
         /* ===== WUDHU ===== */
         const wudhuSteps = [{
-            t: "Niat",
-            img: "https://cdn-icons-png.flaticon.com/512/1034/1034131.png",
-        },
-        {
-            t: "Membasuh Wajah",
-            img: "https://cdn-icons-png.flaticon.com/512/2922/2922510.png",
-        },
-        {
-            t: "Membasuh Tangan",
-            img: "https://cdn-icons-png.flaticon.com/512/2922/2922522.png",
-        },
-        {
-            t: "Mengusap Kepala",
-            img: "https://cdn-icons-png.flaticon.com/512/2922/2922499.png",
-        },
-        {
-            t: "Membasuh Kaki",
-            img: "https://cdn-icons-png.flaticon.com/512/2922/2922527.png",
-        },
+                t: "Niat",
+                img: "https://cdn-icons-png.flaticon.com/512/1034/1034131.png",
+            },
+            {
+                t: "Membasuh Wajah",
+                img: "https://cdn-icons-png.flaticon.com/512/2922/2922510.png",
+            },
+            {
+                t: "Membasuh Tangan",
+                img: "https://cdn-icons-png.flaticon.com/512/2922/2922522.png",
+            },
+            {
+                t: "Mengusap Kepala",
+                img: "https://cdn-icons-png.flaticon.com/512/2922/2922499.png",
+            },
+            {
+                t: "Membasuh Kaki",
+                img: "https://cdn-icons-png.flaticon.com/512/2922/2922527.png",
+            },
         ];
         let wActive = null;
 
@@ -369,15 +427,192 @@
                     z.classList.add("correct");
                     z.appendChild(wActive);
                     wActive.draggable = false;
-                    wudhuMsg.innerHTML = `🎉 Benar!<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
+                    wudhuMsg.innerHTML =
+                        `🎉 Benar!<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
                 } else {
                     z.classList.add("wrong");
-                    wudhuMsg.innerHTML = `❌ Salah<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
+                    wudhuMsg.innerHTML =
+                        `❌ Salah<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
                 }
                 wActive = null;
             };
             wudhuZones.appendChild(z);
         });
+
+        /* ===== SHOLAT STEP ===== */
+        // helper id
+        /* ===============================
+   GAME URUTAN TATA CARA SHOLAT
+   =============================== */
+
+        // ELEMENT
+        const sholatStepsDiv = document.getElementById("sholatSteps");
+        const sholatZones = document.getElementById("sholatZones");
+        const sholatStepMsg = document.getElementById("sholatStepMsg");
+
+        // DATA (URUTAN BENAR)
+        const sholatSteps = [{
+                t: "Membaca Niat",
+                img: "assets/sholat/Niat.png"
+            },
+            {
+                t: "Takbiratul Ihram",
+                img: "assets/sholat/Takbir.png"
+            },
+            {
+                t: "Berdiri & Membaca Al-Fatihah",
+                img: "assets/sholat/Bersedekap.png"
+            },
+            {
+                t: "Rukuk",
+                img: "assets/sholat/Ruku'.png"
+            },
+            {
+                t: "I'tidal",
+                img: "assets/sholat/I'tidal.png"
+            },
+            {
+                t: "Sujud",
+                img: "assets/sholat/Sujud.png"
+            },
+            {
+                t: "Duduk Iftirasy",
+                img: "assets/sholat/Duduk Iftirasy.png"
+            },
+            {
+                t: "Sujud",
+                img: "assets/sholat/Sujud.png"
+            },
+            {
+                t: "Tasyahud Awal",
+                img: "assets/sholat/Tasyahud Awal.png"
+            },
+            {
+                t: "Tasyahud Akhir",
+                img: "assets/sholat/Tasyahud Akhir.png"
+            },
+            {
+                t: "Salam",
+                img: "assets/sholat/Salam.png"
+            }
+        ];
+
+        let sActive = null;
+
+        /* ===============================
+           INIT GAME
+           =============================== */
+        function initSholatStepsGame() {
+            sholatStepsDiv.innerHTML = "";
+            sholatZones.innerHTML = "";
+            sholatStepMsg.innerHTML = "";
+            sActive = null;
+
+            // BUAT ITEM DRAG (ACAK)
+            [...sholatSteps]
+            .map((s, index) => ({
+                    ...s,
+                    index
+                })) // simpan index urutan benar
+                .sort(() => Math.random() - 0.5)
+                .forEach(s => {
+                    const d = document.createElement("div");
+                    d.className = "item-step";
+                    d.draggable = true;
+                    d.dataset.stepIndex = s.index;
+
+                    d.innerHTML = `
+                        <img src="${s.img}" style="width:150px;height:auto;" alt="${s.t}">
+                        <div>${s.t}</div>
+                    `;
+
+                    d.addEventListener("dragstart", () => {
+                        sActive = d;
+                    });
+
+                    sholatStepsDiv.appendChild(d);
+                });
+
+            // BUAT DROPZONE SESUAI URUTAN
+            sholatSteps.forEach((_, i) => {
+                const z = document.createElement("div");
+                z.className = "dropzone-step";
+                z.dataset.zoneIndex = i;
+                z.textContent = "Urutan " + (i + 1);
+
+                z.addEventListener("dragover", e => e.preventDefault());
+
+                z.addEventListener("drop", e => {
+                    e.preventDefault();
+                    z.classList.remove("correct", "wrong");
+
+                    if (
+                        sActive &&
+                        Number(sActive.dataset.stepIndex) === Number(z.dataset.zoneIndex)
+                    ) {
+                        z.classList.add("correct");
+                        z.appendChild(sActive);
+                        sActive.draggable = false;
+                        sActive.classList.add("used");
+
+                        // sholatStepMsg.innerHTML = `
+                        //     🎉 Benar! MasyaAllah<br>
+                        //     <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">
+                        // `;
+
+                        checkFinish();
+                    } else {
+                        z.classList.add("wrong");
+                        // sholatStepMsg.innerHTML = `
+                        //     ❌ Belum tepat, coba lagi<br>
+                        //     <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">
+                        // `;
+                        Swal.fire({
+                            icon: "error",
+                            title: "Ups!",
+                            text: "Urutannya belum benar, coba lagi ya 😊"
+                        });
+                        z.classList.remove("wrong");
+                    }
+
+                    sActive = null;
+                });
+
+                sholatZones.appendChild(z);
+            });
+        }
+
+        /* ===============================
+           CEK SELESAI
+           =============================== */
+        function checkFinish() {
+            const remaining = document.querySelectorAll(".item-step:not(.used)").length;
+            if (remaining === 0) {
+                // sholatStepMsg.innerHTML = `
+                //     🌟 Semua urutan sholat benar!<br>
+                //     MasyaAllah anak sholeh 🤍
+                // `;
+                Swal.fire({
+                    icon: "success",
+                    title: "MasyaAllah 🎉",
+                    text: "Semua tata cara sholat sudah benar!",
+                    confirmButtonText: "Alhamdulillah"
+                });
+            }
+        }
+
+        /* ===============================
+           RESET GAME (TOMBOL)
+           =============================== */
+        function resetSholatStepsGame() {
+            initSholatStepsGame();
+        }
+
+        /* ===============================
+           AUTO LOAD SAAT HALAMAN DIBUKA
+           =============================== */
+        initSholatStepsGame();
+
 
         function resetSholatGame() {
             // kosongkan kolom
@@ -413,10 +648,12 @@
                         z.classList.add('correct');
                         z.appendChild(active);
                         active.draggable = false;
-                        message.innerHTML = `🎉 Benar!<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
+                        message.innerHTML =
+                            `🎉 Benar!<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" width="70">`;
                     } else {
                         z.classList.add('wrong');
-                        message.innerHTML = `❌ Salah<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
+                        message.innerHTML =
+                            `❌ Salah<br> <img src="https://cdn-icons-png.flaticon.com/512/742/742774.png" width="70">`;
                     }
                     active = null;
                 };
