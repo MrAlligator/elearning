@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Susun Tata Cara Sholat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: Poppins, Arial, sans-serif;
+            background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
+            margin: 0;
+        }
+
+        header {
+            background: #4f46e5;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4f46e5;
+        }
+
+        .back-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        /* ===== DROPZONE (ATAS) ===== */
+        .zone-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .dropzone {
+            min-height: 180px;
+            border: 3px dashed #94a3b8;
+            border-radius: 16px;
+            background: #f1f5f9;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .dropzone img {
+            width: 120px;
+            display: block;
+            margin: auto;
+        }
+
+        .dropzone.correct {
+            background: #bbf7d0;
+            border-color: #22c55e;
+        }
+
+        /* ===== ITEM (BAWAH) ===== */
+        .steps-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .item {
+            background: #eef2ff;
+            border-radius: 16px;
+            padding: 8px;
+            text-align: center;
+            cursor: grab;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .item img {
+            width: 120px;
+            display: block;
+            margin: auto;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 2px dashed #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Susun Tata Cara Sholat</h1>
+        <p>Belajar sambil bermain 🌙</p>
+    </header>
+
+    <div class="container">
+
+        <button class="back-btn" onclick="backMenu()">⬅ Kembali</button>
+        <button class="back-btn" onclick="resetGame()">🔄 Mulai Ulang</button>
+
+        <h2>Susun Urutan Gerakan Sholat</h2>
+
+        <!-- DROPZONE -->
+        <div class="zone-wrapper" id="sholatZones"></div>
+
+        <hr>
+
+        <!-- ITEM -->
+        <div class="steps-wrapper" id="sholatSteps"></div>
+
+    </div>
+
+    <script>
+        const sholatStepsDiv = document.getElementById("sholatSteps");
+        const sholatZones = document.getElementById("sholatZones");
+
+        const sholatSteps = [{
+                t: "Membaca Niat",
+                img: "assets/sholat/Niat.png"
+            },
+            {
+                t: "Takbiratul Ihram",
+                img: "assets/sholat/Takbir.png"
+            },
+            {
+                t: "Berdiri & Membaca Al-Fatihah",
+                img: "assets/sholat/Bersedekap.png"
+            },
+            {
+                t: "Rukuk",
+                img: "assets/sholat/Ruku'.png"
+            },
+            {
+                t: "I'tidal",
+                img: "assets/sholat/I'tidal.png"
+            },
+            {
+                t: "Sujud",
+                img: "assets/sholat/Sujud.png"
+            },
+            {
+                t: "Duduk Iftirasy",
+                img: "assets/sholat/Duduk Iftirasy.png"
+            },
+            {
+                t: "Sujud",
+                img: "assets/sholat/Sujud.png"
+            },
+            {
+                t: "Tasyahud Awal",
+                img: "assets/sholat/Tasyahud Awal.png"
+            },
+            {
+                t: "Tasyahud Akhir",
+                img: "assets/sholat/Tasyahud Akhir.png"
+            },
+            {
+                t: "Salam",
+                img: "assets/sholat/Salam.png"
+            }
+        ];
+
+        let activeItem = null;
+        let correctCount = 0;
+
+        function initGame() {
+            sholatStepsDiv.innerHTML = "";
+            sholatZones.innerHTML = "";
+            correctCount = 0;
+
+            // DROPZONE (ATAS)
+            sholatSteps.forEach((s, i) => {
+                const z = document.createElement("div");
+                z.className = "dropzone";
+                z.textContent = "Urutan " + (i + 1);
+
+                z.ondragover = e => e.preventDefault();
+                z.ondrop = () => {
+                    if (!activeItem) return;
+
+                    if (activeItem.dataset.step === s.t) {
+                        z.classList.add("correct");
+                        z.appendChild(activeItem);
+                        activeItem.draggable = false;
+                        activeItem = null;
+                        correctCount++;
+
+                        if (correctCount === sholatSteps.length) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "MasyaAllah 🎉",
+                                text: "Semua gerakan sholat sudah benar!"
+                            });
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Ups 😅",
+                            text: "Urutannya belum tepat",
+                            timer: 1200,
+                            showConfirmButton: false
+                        });
+                    }
+                };
+
+                sholatZones.appendChild(z);
+            });
+
+            // ITEM (BAWAH)
+            [...sholatSteps]
+            .sort(() => Math.random() - 0.5)
+                .forEach(s => {
+                    const d = document.createElement("div");
+                    d.className = "item";
+                    d.draggable = true;
+                    d.dataset.step = s.t;
+                    d.innerHTML = `<img src="${s.img}">${s.t}`;
+                    d.ondragstart = () => activeItem = d;
+                    sholatStepsDiv.appendChild(d);
+                });
+        }
+
+        function resetGame() {
+            initGame();
+        }
+
+        function backMenu() {
+            window.location.href = "index.html";
+        }
+
+        initGame();
+    </script>
+
+</body>
+
+</html>
